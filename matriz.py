@@ -41,10 +41,8 @@ N_MIN = 20
 N_MAX = 100
 N_DEFECTO = 50
 
-
 # ================= Creación =================
 def crear_matriz(n):
-    """Crea una matriz n x n llena de aire. Lanza ValueError si n no es válido."""
     if not validar_n(n):
         raise ValueError(f"N debe ser un entero entre {N_MIN} y {N_MAX}.")
     matriz = []
@@ -54,33 +52,62 @@ def crear_matriz(n):
             fila.append(AIRE)
         matriz.append(fila)
     return matriz
-
+"""
+Crea una matriz cuadrada de tamaño N x N.
+Parámetros:
+    n: dimensión de la matriz.
+Retorna:
+    Una matriz llena de casillas de aire.
+Se valida el tamaño antes de crear la matriz.
+Si el tamaño no es válido, se genera un error.
+"""
 
 def copiar_matriz(matriz):
     return [fila[:] for fila in matriz]
-
+"""
+Crea una copia independiente de la matriz.
+Parámetros:
+    matriz: matriz que se desea copiar.
+Retorna:
+    Una nueva matriz con los mismos valores.
+Se utiliza para conservar una copia del mundo sin modificar accidentalmente la matriz original.
+"""
 
 def limpiar(matriz):
-    """Pone todas las casillas en aire (sin crear una matriz nueva)."""
     n = len(matriz)
     for f in range(n):
         for c in range(n):
             matriz[f][c] = AIRE
-
+"""
+Pone todas las casillas en aire (sin crear una matriz nueva).
+"""
 
 # ================= Validación =================
 def validar_n(n):
-    """True si n es un entero dentro del rango permitido."""
     return type(n) == int and N_MIN <= n <= N_MAX
-
+"""
+Comprueba si el tamaño N es válido.
+Condiciones:
+    - Debe ser un número entero.
+    - Debe ser mayor o igual a 20.
+    - Debe ser menor o igual a 100.
+    Se utiliza type(n) == int para impedir que
+        valores booleanos sean aceptados como dimensiones.
+"""
 
 def es_codigo_valido(codigo):
     return type(codigo) == int and codigo in NOMBRES
-
+"""
+Comprueba si un código corresponde a un elemento definido.
+Parámetros:
+    codigo: número que identifica un elemento.
+Retorna:
+    True si el código existe.
+    False si el código no está definido.
+Esta validación evita introducir códigos inexistentes en la matriz.
+"""
 
 def validar_matriz(matriz):
-    """Revisa que la matriz sea cuadrada, de tamaño válido y con códigos válidos.
-    Devuelve (True, "") o (False, "mensaje de error")."""
     if type(matriz) != list or len(matriz) == 0:
         return False, "La matriz está vacía."
     n = len(matriz)
@@ -93,13 +120,37 @@ def validar_matriz(matriz):
             if not es_codigo_valido(valor):
                 return False, f"Código inválido '{valor}' en la fila {i + 1}."
     return True, ""
-
+"""
+Comprueba que una matriz tenga una estructura válida.
+Verifica:
+    1. Que sea una lista.
+    2. Que no esté vacía.
+    3. Que tenga un tamaño permitido.
+    4. Que todas las filas tengan la misma longitud.
+    5. Que todos sus valores sean códigos válidos.
+Parámetros:
+    matriz: matriz que se desea comprobar.
+Retorna:
+    (True, "") si la matriz es válida.
+    (False, mensaje) si encuentra algún error.
+Se amplía la validación para detectar matrices incompletas, dimensiones incorrectas y códigos inválidos.
+Esta función también será utilizada por mapas.py al cargar archivos.
+    """
 
 def en_limites(matriz, fila, col):
     """True si (fila, col) está dentro de la matriz."""
     n = len(matriz)
     return 0 <= fila < n and 0 <= col < n
-
+"""
+Comprueba si una posición se encuentra dentro del mundo.
+Parámetros:
+    fila: coordenada vertical.
+    col: coordenada horizontal.
+Retorna:
+    True si la posición existe.
+    False si está fuera de la matriz.
+Se verifica que las coordenadas sean enteros antes de realizar las comparaciones.
+"""
 
 # ================= Acceso seguro =================
 def obtener(matriz, fila, col):
