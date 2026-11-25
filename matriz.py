@@ -19,11 +19,23 @@ PLANTA_2 = 9
 PLANTA_3 = 10
 ANIMAL = 11
 
+# Etapas del girasol
+GIRASOL_1 = 12
+GIRASOL_2 = 13
+GIRASOL_3 = 14
+
+# Etapas del tomate
+TOMATE_1 = 15
+TOMATE_2 = 16
+TOMATE_3 = 17
+
 NOMBRES = {
     AIRE: "Aire", ARENA: "Arena", AGUA: "Agua", PIEDRA: "Piedra",
     TIERRA: "Tierra", FUEGO: "Fuego", SEMILLA: "Semilla", PASTO: "Pasto",
     PLANTA_1: "Planta 1", PLANTA_2: "Planta 2", PLANTA_3: "Planta 3",
     ANIMAL: "Animal",
+    GIRASOL_1: "Girasol 1", GIRASOL_2: "Girasol 2", GIRASOL_3: "Girasol 3",
+    TOMATE_1: "Tomate 1", TOMATE_2: "Tomate 2", TOMATE_3: "Tomate 3",
 }
 
 COLORES = {
@@ -31,6 +43,8 @@ COLORES = {
     TIERRA: "#7b4a22", FUEGO: "#ff5a00", SEMILLA: "#c9a15b", PASTO: "#3fbf3f",
     PLANTA_1: "#9be37a", PLANTA_2: "#4caf50", PLANTA_3: "#1b5e20",
     ANIMAL: "#ffffff",
+    GIRASOL_1: "#a8d878", GIRASOL_2: "#65a843", GIRASOL_3: "#e5c542",
+    TOMATE_1: "#8bcf75", TOMATE_2: "#4caf50", TOMATE_3: "#d94b3d",
 }
 
 # Elementos que el usuario puede elegir en la interfaz
@@ -86,10 +100,10 @@ def copiar_matriz(matriz):
 
 
 def limpiar(matriz):
-    """Convierte todas las casillas en el mundo creado en aire."""
+    """Convierte todas las casillas del mundo en aire."""
 
     for f in range(len(matriz)):
-        for c in range(len(matriz)):
+        for c in range(len(matriz[f])):
             matriz[f][c] = AIRE
 
 
