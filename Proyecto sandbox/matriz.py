@@ -1,3 +1,5 @@
+"""Operaciones y validaciones sobre la matriz que representa el mundo del simulador."""
+
 AIRE = 0
 ARENA = 1
 AGUA = 2
