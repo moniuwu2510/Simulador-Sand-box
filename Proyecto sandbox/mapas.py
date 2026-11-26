@@ -1,6 +1,6 @@
+"""Lectura, escritura y limpieza de mapas guardados en archivos de texto."""
 
 import matriz as mz
-
 
 def guardar_mapa(matriz, ruta):
     """
