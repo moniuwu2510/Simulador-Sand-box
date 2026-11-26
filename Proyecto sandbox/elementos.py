@@ -1,3 +1,5 @@
+"""Actualización física de los materiales móviles, principalmente arena y agua."""
+
 # elementos.py
 # Movimiento de arena y agua.
 # Piedra y tierra permanecen fijas.
@@ -10,6 +12,7 @@ import matriz as mz
 # ================= Actualización general =================
 
 def actualizar(matriz):
+    """Aplica las reglas de actualización del módulo sobre la matriz del mundo."""
     n = len(matriz)
     movido = [[False] * n for _ in range(n)]   # para no mover algo 2 veces en el mismo tick
     #De ABAJO hacia ARRIBA: lo que cae no se vuelve a procesar en este tick
@@ -28,6 +31,7 @@ def actualizar(matriz):
 # ================= Movimiento de arena =================
 
 def mover_arena(matriz, f, c, movido):
+    """Calcula el movimiento de una partícula de arena durante un ciclo."""
     # 1. Intentar caer verticalmente.
     if mz.obtener(matriz, f + 1, c) == mz.AIRE:
 
@@ -61,7 +65,7 @@ def mover_arena(matriz, f, c, movido):
 # ================= Movimiento de agua =================
 
 def mover_agua(matriz, f, c, movido):
-
+    """Calcula el movimiento de una partícula de agua durante un ciclo."""
     # 1. Intentar caer verticalmente.
     if mz.obtener(matriz, f + 1, c) == mz.AIRE:
         mz.intercambiar(matriz, f, c, f + 1, c)
