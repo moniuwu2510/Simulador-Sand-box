@@ -1,3 +1,5 @@
+"""Reglas de interacción entre materiales, incluida la propagación y extinción del fuego."""
+
 # interacciones.py
 # Colisiones y transformaciones:
 # agua + tierra = pasto
