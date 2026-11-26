@@ -1,3 +1,8 @@
+"""
+Interfaz gráfica del simulador:
+permite seleccionar elementos, dibujar el mundo y controlar la simulación.
+"""
+
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import matriz as mz
@@ -7,12 +12,15 @@ import animales
 import plantas
 import os
 from PIL import Image, ImageTk
+
 # variables globales de pixeles dibujados 
 TAM_CANVAS = 600      # pixeles del área de dibujo
 VELOCIDAD_MS = 50     # cada cuántos ms avanza la simulación
+
 # clase juego con sus atributos y metodos
 class Juego:
     def __init__(self, padre, matriz, paso, reiniciar, al_cerrar):
+        """Inicializa el objeto y prepara sus datos y recursos."""
         self.paso = paso
         self.reiniciar = reiniciar
         self.al_cerrar = al_cerrar
@@ -40,6 +48,7 @@ class Juego:
 
 
     def crear_interfaz(self):
+        """Construye los componentes visuales y los controles de la ventana."""
         imagen = Image.open("fondo_sandbox.png")
         imagen = imagen.resize((1100, 800))
 
@@ -158,6 +167,7 @@ class Juego:
             )
 
             self.botones_elementos[codigo] = boton
+            
         # Posición según la cantidad de elementos
         y_herramientas = 60 + (
             (len(mz.SELECCIONABLES) + 1) // 2
@@ -426,6 +436,7 @@ class Juego:
         )
 
     def cargar_sprites(self):
+        """Carga desde disco las imágenes utilizadas para representar animales y plantas."""
         ruta_base = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             "iconos",
@@ -476,6 +487,7 @@ class Juego:
             print(ruta_comiendo)
 
     def redimensionar_sprites(self):
+        """Ajusta el tamaño de los sprites a las dimensiones actuales de las celdas."""
         self.sprites.clear()
         tam = max(1, int(self.tam_celda))
         for nombre, imagen in self.sprites_originales.items():
@@ -523,11 +535,13 @@ class Juego:
             )
     def obtener_sprite(self, codigo, fila, columna):
         # Animales
+        """Determina el sprite que representa al animal en su estado actual."""
         if codigo == mz.ANIMAL:
             return animales.obtener_sprite(
                 fila, columna
             )
         # Plantas y semillas
+        """Determina el sprite que representa el tipo de planta variando su estado actual."""
         sprites_plantas = {
             mz.SEMILLA: "arbol_semilla.png",
             # Árbol
@@ -544,7 +558,9 @@ class Juego:
             17: "tomate_adulta.png"
         }
         return sprites_plantas.get(codigo)
+        
     def crear_celdas(self):
+        """Prepara la cuadrícula que representa las celdas del mundo."""
         self.canvas.delete("all")
         self.tam_celda = TAM_CANVAS / self.n
         self.sprites_canvas.clear()
@@ -570,7 +586,9 @@ class Juego:
             for _ in range(self.n)
         ]
         self.dibujar()
+        
     def dibujar(self):
+        """Actualiza en pantalla la representación visual de la matriz."""
         for f in range(self.n):
             for c in range(self.n):
                 codigo = self.matriz[f][c]
@@ -628,6 +646,7 @@ class Juego:
                 self.dibujado[f][c] = codigo
         # Mantener visible la guía del rectángulo
         self.canvas.tag_raise("guia")
+        
     def poner_matriz(self, nueva):
         """Cambia la matriz completa (al cargar o cambiar N)."""
         self.matriz = nueva
@@ -639,9 +658,11 @@ class Juego:
 
    # mouse
     def pixel_a_celda(self, evento):
+        """Convierte las coordenadas del mouse en una posición de la matriz."""
         return int(evento.y // self.tam_celda), int(evento.x // self.tam_celda)
     
     def clic(self, evento):
+        """Procesa la selección o edición de una celda mediante un clic."""
         fila, col = self.pixel_a_celda(evento)
         # Verificar los límites del mapa
         if not (0 <= fila < self.n and 0 <= col < self.n):
@@ -674,6 +695,7 @@ class Juego:
             self.inicio_rect = (fila, col)
     def arrastrar(self, evento):
         # No generar animales ni semillas al arrastrar
+        """Aplica la herramienta seleccionada mientras se arrastra el mouse."""
         if self.elemento in (mz.ANIMAL, mz.SEMILLA):
             return
         fila, col = self.pixel_a_celda(evento)
@@ -698,6 +720,7 @@ class Juego:
                 tags="guia"
             )
     def soltar(self, evento):
+        """Finaliza la operación de dibujo o selección iniciada con el mouse."""
         if self.elemento in (mz.ANIMAL, mz.SEMILLA):
             self.inicio_rect = None
             self.canvas.delete("guia")
@@ -711,6 +734,7 @@ class Juego:
 
     # botones
     def elegir(self, codigo):
+        """Selecciona el elemento que se utilizará para pintar el mundo."""
         self.elemento = codigo
         sonido.reproducir("clic")
         nombre = "Borrador" if codigo == mz.AIRE else mz.NOMBRES[codigo]
@@ -739,10 +763,12 @@ class Juego:
         )
 
     def cambiar_modo(self):
+        """Alterna entre las herramientas de dibujo disponibles."""
         self.modo = "rectangulo" if self.modo == "pincel" else "pincel"
         self.btn_modo.config(text="Modo: Rectángulo" if self.modo == "rectangulo" else "Modo: Pincel")
 
     def aplicar_n(self):
+        """Aplica el tamaño indicado para la matriz del mundo."""
         texto = self.entrada_n.get()
         if not texto.isdigit() or not mz.validar_n(int(texto)):
             messagebox.showerror("Error", f"N debe ser un entero entre {mz.N_MIN} y {mz.N_MAX}.",
@@ -751,12 +777,14 @@ class Juego:
         self.poner_matriz(mz.crear_matriz(int(texto)))
 
     def guardar(self):
+        """Abre el proceso para guardar el mapa actual."""
         ruta = filedialog.asksaveasfilename(parent=self.ventana, defaultextension=".txt",
                                             filetypes=[("Mapa", "*.txt")])
         if ruta:
             mapas.guardar_mapa(self.matriz, ruta)
 
     def cargar(self):
+        """Abre y carga un mapa desde un archivo."""
         ruta = filedialog.askopenfilename(parent=self.ventana,
                                           filetypes=[("Mapa", "*.txt"), ("Todos", "*.*")])
         if not ruta:
@@ -769,19 +797,23 @@ class Juego:
         self.poner_matriz(nueva)
 
     def limpiar(self):
+        """Limpia el contenido del mundo y reinicia sus estados asociados."""
         mapas.limpiar_mapa(self.matriz)
         self.reiniciar()
 
     def pausar(self):
+        """Alterna el estado de pausa de la simulación."""
         self.pausado = not self.pausado
         self.btn_pausa.config(text="Reanudar" if self.pausado else "Pausar")
 
     def cerrar(self):
+        """Detiene los procesos de la ventana y ejecuta las acciones de cierre."""
         self.activo = False               # detiene el ciclo
         self.ventana.destroy()
         self.al_cerrar(self.matriz)       # le devuelve el mundo a main.py
 
     def ciclo(self):
+        """Ejecuta y programa el siguiente ciclo de actualización de la simulación."""
         if not self.activo:
             return
         if not self.pausado:
