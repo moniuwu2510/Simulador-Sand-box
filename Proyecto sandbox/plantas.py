@@ -1,3 +1,5 @@
+"""Reglas de crecimiento y reproducción de las plantas dentro del mundo."""
+
 import matriz as mz
 import random
 
@@ -82,6 +84,7 @@ def espacio_para_crecer(matriz, fila, columna, etapa):
 
 def mover_semillas(matriz):
 
+    """Actualiza el desplazamiento o dispersión de las semillas."""
     n = len(matriz)
 
     for f in range(n - 2, -1, -1):
@@ -105,6 +108,7 @@ def mover_semillas(matriz):
 
 def actualizar(matriz):
 
+    """Aplica las reglas de actualización del módulo sobre la matriz del mundo."""
     n = len(matriz)
 
     # Aplicar gravedad a las semillas
@@ -196,4 +200,5 @@ def actualizar(matriz):
 
 def reiniciar():
 
+    """Restablece los estados internos del módulo a sus valores iniciales."""
     tiempos.clear()
