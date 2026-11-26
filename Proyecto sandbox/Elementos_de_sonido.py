@@ -1,3 +1,5 @@
+"""Carga y control de la música de fondo y de los efectos de sonido de la aplicación."""
+
 import pygame
 import os
 
@@ -18,6 +20,7 @@ except pygame.error as error:
 
 def cargar_sonido(nombre):
 
+    """Carga un efecto de sonido y devuelve el recurso si está disponible."""
     ruta = os.path.join(RUTA_BASE, nombre)
 
     if not pygame.mixer.get_init():
@@ -41,6 +44,7 @@ sonidos = {
     "muerte": sonido_muerte,
     "comiendo": sonido_comiendo
 }
+
 # ================= Música de fondo =================
 
 musica_cargada = False
@@ -59,11 +63,11 @@ if pygame.mixer.get_init() and os.path.isfile(ruta_musica):
     except pygame.error as error:
         print("Error al cargar música:", error)
 
-
 # ================= Reproducir música =================
 
 def iniciar_musica():
 
+    """Inicia la reproducción en bucle de la música de fondo."""
     if activado and musica_cargada:
 
         pygame.mixer.music.set_volume(volumen / 100)
@@ -74,6 +78,7 @@ def iniciar_musica():
 
 def detener_musica():
 
+    """Detiene la reproducción de la música de fondo."""
     if musica_cargada:
         pygame.mixer.music.stop()
 
@@ -82,6 +87,7 @@ def detener_musica():
 
 def activar(estado):
 
+    """Activa o desactiva la reproducción de audio."""
     global activado
 
     activado = bool(estado)
@@ -100,6 +106,7 @@ def activar(estado):
 
 def cambiar_volumen(nuevo_volumen):
 
+    """Actualiza el volumen de la música y de los efectos."""
     global volumen
 
     volumen = max(0, min(100, float(nuevo_volumen)))
@@ -117,6 +124,7 @@ def cambiar_volumen(nuevo_volumen):
 
 def reproducir(nombre):
 
+    """Reproduce el efecto de sonido asociado al nombre recibido."""
     if not activado:
         return
 
