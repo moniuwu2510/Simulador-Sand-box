@@ -1,3 +1,5 @@
+"""Punto de entrada de la aplicación y menú principal de SandBox."""
+
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
@@ -13,12 +15,14 @@ import os
 import Elementos_de_sonido as sonido
 
 def paso_simulacion(matriz): # inicializamos la simulación, elementos e interacciones con prioridad
+    """Ejecuta en el orden establecido las actualizaciones de cada subsistema."""
     elementos.actualizar(matriz)
     interacciones.actualizar(matriz)
     plantas.actualizar(matriz)
     animales.actualizar(matriz)
 
 def reiniciar_estados(): # reinicia estados de todo al iniciar
+    """Restablece los estados internos de los módulos de la simulación."""
     elementos.reiniciar()
     interacciones.reiniciar()
     plantas.reiniciar()
@@ -26,6 +30,7 @@ def reiniciar_estados(): # reinicia estados de todo al iniciar
     
 class Menu:
     def __init__(self, root):
+        """Inicializa el objeto y prepara sus datos y recursos."""
         self.root = root
         self.root.title("MichiBox crea tu propia aventura") # cargamos atributos de la clase 
         self.root.geometry("1100x800")
@@ -37,6 +42,7 @@ class Menu:
         sonido.iniciar_musica()
         # iniciamos metodos
     def crear_menu(self):
+        """Construye la ventana principal, sus botones y sus elementos visuales."""
         imagen = Image.open("fondo_sandbox.png") # importamos imagen de fondo de las mismas dimensiones que la ventana
         imagen = imagen.resize((1100, 800))
         self.fondo = ImageTk.PhotoImage(
@@ -193,6 +199,7 @@ class Menu:
         )
         # control de ventanas mejorado si ya existe otra no abre devuelve True
     def ventana_abierta(self, nombre):
+        """Comprueba si ya existe una ventana secundaria del tipo indicado."""
         v = self.ventanas.get(nombre)
         if v is not None and v.winfo_exists():
             v.deiconify()
@@ -201,6 +208,7 @@ class Menu:
             return True
         return False
     def jugar(self):
+        """Abre la ventana de juego y conecta sus acciones con el menú principal."""
         if self.juego is not None:
             self.ventana_abierta("juego")
             return
@@ -232,6 +240,7 @@ class Menu:
         )
 # guardamos mundo al cerrar el juego
     def al_cerrar_juego(self, matriz):
+        """Recibe el estado final del mundo cuando se cierra la ventana de juego."""
         self.matriz = matriz
         self.juego = None
 
@@ -247,6 +256,7 @@ class Menu:
         )
 # cargamos mapas
     def cargar(self):
+        """Abre y carga un mapa desde un archivo."""
         ruta = filedialog.askopenfilename(filetypes=[("Mapa", "*.txt"), ("Todos", "*.*")])
         if not ruta:
             return
@@ -260,12 +270,14 @@ class Menu:
         self.jugar()
 # guardamos mapas
     def guardar(self):
+        """Abre el proceso para guardar el mapa actual."""
         ruta = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Mapa", "*.txt")])
         if ruta:
             mapas.guardar_mapa(self.matriz, ruta)
             messagebox.showinfo("Guardado", "Mapa guardado correctamente.")
 # abrimos sonidos
     def abrir_sonido(self):
+        """Muestra los controles relacionados con el audio."""
         if self.ventana_abierta("sonido"):
             return
         v = tk.Toplevel(self.root)
@@ -286,6 +298,7 @@ class Menu:
 # abre las instrucciones
 
     def abrir_instrucciones(self):
+        """Muestra las instrucciones de uso del simulador."""
         if self.ventana_abierta("instrucciones"):
             return
         v = tk.Toplevel(self.root)
@@ -355,6 +368,7 @@ class Menu:
 
         def crear_seccion(titulo):
 
+            """Ejecuta la tarea de crear seccion dentro del simulador."""
             marco = tk.Frame(v, bg=PANEL)
 
             marco.pack(
