@@ -1,3 +1,5 @@
+"""Lógica de movimiento, alimentación, estados y representación visual de los animales."""
+
 import matriz as mz
 import Elementos_de_sonido as sonido
 # ================= Configuración =================
@@ -33,10 +35,12 @@ PLANTAS = (
 # ================= Validaciones =================
 
 def dentro_mapa(matriz, fila, columna):
+    """Comprueba si la posición indicada pertenece al mundo."""
     return mz.en_limites(matriz, fila, columna)
 
 
 def espacio_libre(matriz, fila, columna):
+    """Indica si la celda indicada está vacía."""
     return mz.obtener(matriz, fila, columna) == mz.AIRE
 
 
@@ -81,6 +85,7 @@ def puede_moverse(matriz, fila, columna, nueva_fila, nueva_columna):
 
 def crear_estado():
 
+    """Crea la estructura de estado inicial utilizada por los animales."""
     return {
         "direccion": DERECHA,
         "fotograma": 0,
@@ -92,11 +97,11 @@ def crear_estado():
 # ================= Interacciones =================
 
 def detectar_fuego(matriz, fila, columna):
+    
     """
     Comprueba si existe fuego dentro o junto
     al área que ocupa el animal.
     """
-
     for f, c in area_animal(fila, columna):
 
         if mz.obtener(matriz, f, c) == mz.FUEGO:
@@ -109,11 +114,11 @@ def detectar_fuego(matriz, fila, columna):
 
 
 def detectar_planta(matriz, fila, columna, direccion):
+    
     """
     Busca una planta delante del animal.
     Retorna su posición o None.
     """
-
     distancia = ANCHO_ANIMAL // 2 + 1
 
     c = columna + direccion * distancia
@@ -127,11 +132,11 @@ def detectar_planta(matriz, fila, columna, direccion):
 
 
 def detectar_agua(matriz, fila, columna):
+    
     """
     Comprueba si existe agua debajo del
     área que ocupará el animal.
     """
-
     mitad = ANCHO_ANIMAL // 2
 
     for c in range(columna - mitad, columna + mitad + 1):
@@ -146,6 +151,7 @@ def detectar_agua(matriz, fila, columna):
 
 def actualizar(matriz):
 
+    """Aplica las reglas de actualización del módulo sobre la matriz del mundo."""
     global contador
 
     contador += 1
@@ -296,6 +302,7 @@ def actualizar(matriz):
 
 def obtener_sprite(fila, columna):
 
+    """Determina el sprite que representa al animal en su estado actual."""
     estado = estados.get(
         (fila, columna),
         crear_estado()
@@ -320,6 +327,7 @@ def obtener_sprite(fila, columna):
 
 def reiniciar():
 
+    """Restablece los estados internos del módulo a sus valores iniciales."""
     global contador
 
     contador = 0
